@@ -1,55 +1,79 @@
-#include <stdio.h> 
-#define max 10 
-void forward(float x[], float y[][max], int n) 
-{ 
-    int i, j; 
-    float a ; 
-    float h, u, sum, p; 
-    for (j = 1; j < n; j++) { 
-        for (i = 0; i < n - j; i++) { 
-            y[i][j] = y[i + 1][j - 1] - y[i][j - 1]; 
-        } 
-    } 
-    printf("\n The forward difference table is:\n"); 
-    for (i = 0; i < n; i++) { 
-        printf("\n"); 
-        for (j = 0; j < n - i; j++) { 
-            printf("%f\t", y[i][j]); 
-        } 
-    } 
-    printf("\nenter point of interpolation\n");
-    scanf("%f",&a);
-    p = 1.0; 
-    sum = y[0][0]; 
-    h = x[1] - x[0]; 
-    u = (a - x[0]) / h; 
-    for (j = 1; j < n; j++) { 
-        p = p * (u - j + 1) / j; 
-        sum = sum + p * y[0][j]; 
-    } 
-    printf("\nThe value of y at x=%0.1f is %0.4f\n", a, sum); 
-} 
-int main() 
-{ 
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+
+// Function to calculate u used in the interpolation formula
+float u_cal(float u, int n) {
+    float temp = u;
+    for (int i = 1; i < n; i++)
+        temp = temp * (u - i);
+    return temp;
+}
+
+// Function to calculate factorial of a number
+int fact(int n) {
+    int f = 1;
+    for (int i = 2; i <= n; i++)
+        f *= i;
+    return f;
+}
+
+int main() {
     int n;
-    float x[max],y[max][max];
-    printf("Enter number of points\n");
-    scanf("%d",&n);
-    for(int i=0;i<n;i++)
-    {   
-        printf("enter points :x[%d]\n",i);
-        scanf("%f",&x[i]);
+    printf("Name -> Prakhar Tyagi\n");
+    printf("Section -> C\n");
+    printf("Roll no. -> 42\n\n");
+
+    // Input the number of data points
+    printf("Input the no. of values: ");
+    scanf("%d", &n);
+
+    float x[n], y[n][n];
+
+    // Input the x values
+    printf("Input the values of x:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%f", &x[i]);
     }
-    for(int i=0;i<n;i++)
-    {
-        printf("enter values:y[%d]\n",i);
-        scanf("%f",&y[i][0]);
+
+    // Input the corresponding y values
+    printf("Input the values of y:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%f", &y[i][0]);
     }
-    forward(x,y,n); 
 
-    return 0; 
-} 
+    // Creating the forward difference table
+    for (int i = 1; i < n; i++) {
+        for (int j = n - 1; j >= i; j--) {
+            y[j][i] = y[j][i - 1] - y[j - 1][i - 1];
+        }
+    }
 
+    // Displaying the forward difference table
+    printf("Difference table:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j <= i; j++) {
+            printf("%0.2f\t", y[i][j]);
+        }
+        printf("\n");
+    }
 
+    // Input the value for which interpolation is required
+    int val;
+    printf("Enter the value to interpolate: ");
+    scanf("%d", &val);
 
+    // Calculating u
+    float u = (val - x[0]) / (x[1] - x[0]);
 
+    // Applying Newton's Forward Interpolation formula
+    float sum = y[0][0];
+    for (int i = 1; i < n; i++) {
+        sum = sum + (u_cal(u, i) * y[i][i]) / fact(i);
+    }
+
+    // Displaying the result
+    printf("Value at %d is %0.4f\n", val, sum);
+
+    return 0;
+}
