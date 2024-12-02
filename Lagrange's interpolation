@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{ 
+    int n;
+    printf("Input the number of terms: ");
+    scanf("%d", &n);
+
+    float x[n], y[n];
+    
+    // Input values of x
+    printf("Input the values of x: ");
+    for (int i = 0; i < n; i++) 
+    {
+        scanf("%f", &x[i]);
+    }
+    
+    // Input values of y
+    printf("Input the values of y: ");
+    for (int i = 0; i < n; i++) 
+    {
+        scanf("%f", &y[i]);
+    }
+    
+    float p; // Interpolation point
+    printf("Input the interpolation point: ");
+    scanf("%f", &p);
+
+    float ans = 0; // Final interpolated value
+    
+    // Calculate Lagrange's interpolation
+    for (int i = 0; i < n; i++) 
+    {
+        float term = y[i]; // Start with y[i]
+        for (int j = 0; j < n; j++) 
+        {
+            if (i != j) 
+            {
+                term = term * (p - x[j]) / (x[i] - x[j]);
+            }
+        }
+        ans += term;
+    }
+    
+    printf("Value at f(%.2f) = %.3f\n", p, ans);
+    return 0;
+}
