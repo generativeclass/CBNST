@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+// Function to evaluate f(x)
+float fun(float x) 
+{
+    return 1.0 / (1.0 + (x * x)); // Example function: f(x) = 1 / (1 + x^2)
+}
+
+int main() 
+{ 
+    int a, b, n;
+    printf("Input the value of a and b: ");
+    scanf("%d%d", &a, &b);
+
+    printf("Input the number of intervals: ");
+    scanf("%d", &n);
+
+    float h = (b - a) / (float)n; // Step size
+    float x[n + 1], y[n + 1];
+
+    x[0] = a;
+    printf("X: | %f ", x[0]);
+
+    // Compute x values
+    for (int i = 1; i <= n; i++) 
+    { 
+        x[i] = x[i - 1] + h;
+        printf("| %f ", x[i]);
+    }
+    printf("|\n");
+
+    // Compute y values
+    printf("Y: ");
+    for (int i = 0; i <= n; i++) 
+    { 
+        y[i] = fun(x[i]);
+        printf("| %f ", y[i]);
+    }
+    printf("|\n");
+
+    // Apply Trapezoidal Rule
+    float p1 = y[0] + y[n]; // First and last terms
+    float p2 = 0.0;         // Sum of the middle terms
+
+    for (int i = 1; i < n; i++) 
+    { 
+        p2 += y[i];
+    }
+    p2 = p2 * 2;
+
+    float ans = (h / 2) * (p1 + p2); // Final integral value
+    printf("Value of the integral: %f\n", ans);
+
+    return 0;
+}
