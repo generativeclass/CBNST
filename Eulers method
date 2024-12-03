@@ -1,0 +1,43 @@
+#include<stdio.h>
+
+// Define the function f(x, y)
+#define f(x, y) (x + y)
+
+int main() {
+    float x0, y0, xn, h, yn, slope; 
+    int i, n;
+
+
+    // Input initial conditions
+    printf("Enter Initial Condition\n");
+    printf("x0 = ");
+    scanf("%f", &x0);
+    printf("y0 = ");
+    scanf("%f", &y0);
+
+    // Input calculation point and number of intervals
+    printf("Enter calculation point xn = ");
+    scanf("%f", &xn);
+    printf("Enter number of intervals = ");
+    scanf("%d", &n);
+
+    // Calculate step size (h)
+    h = (xn - x0) / n;
+
+    // Euler's Method
+    printf("\nEuler's Method Results:\n");
+    printf("\nx0 = %f\ty0 = %f\n", x0, y0);
+
+    for (i = 0; i < n; i++) {
+        slope = f(x0, y0);      // Calculate the slope using f(x, y)
+        yn = y0 + h * slope;   // Calculate y at the next step
+        y0 = yn;               // Update y for the next iteration
+        x0 = x0 + h;           // Update x for the next iteration
+        printf("x%d = %f\ty%d = %f\n", i + 1, x0, i + 1, y0);
+    }
+
+    // Display final result
+    printf("\nValue of y at x = %0.2f is %0.4f\n", xn, yn);
+
+    return 0;
+}
