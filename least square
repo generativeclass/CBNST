@@ -1,0 +1,92 @@
+#include <stdio.h>
+
+// Function to perform Gauss-Jordan elimination
+void gaussJordan(float a[2][3], int n) {
+    float ratio;
+    for (int i = 0; i < n; i++) {
+        // Check for division by zero
+        if (a[i][i] == 0.0) {
+            printf("Mathematical Error: Division by zero!\n");
+            return;
+        }
+
+        for (int j = 0; j < n; j++) {
+            if (i != j) {
+                ratio = a[j][i] / a[i][i];
+                for (int k = 0; k < n + 1; k++) {
+                    a[j][k] = a[j][k] - ratio * a[i][k];
+                }
+            }
+        }
+    }
+
+    // Normalize diagonal elements to 1
+    for (int i = 0; i < n; i++) {
+        a[i][n] = a[i][n] / a[i][i];
+        a[i][i] = 1;
+    }
+}
+
+int main() {
+    int n;
+
+    // Input number of data points
+    printf("Input the number of data points: ");
+    scanf("%d", &n);
+    if (n < 2) {
+        printf("At least two data points are required.\n");
+        return -1;
+    }
+
+    float x[n], y[n];
+    float sxy = 0, sx = 0, sy = 0, sx2 = 0;
+
+    // Input x values
+    printf("Input the values of x:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%f", &x[i]);
+    }
+
+    // Input y values
+    printf("Input the values of y:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%f", &y[i]);
+    }
+
+    // Calculate summations
+    for (int i = 0; i < n; i++) {
+        sx += x[i];
+        sy += y[i];
+        sx2 += x[i] * x[i];
+        sxy += x[i] * y[i];
+    }
+
+    // Create augmented matrix for solving using Gauss-Jordan
+    float m[2][3];
+    m[0][0] = n;       // Sum of 1s
+    m[0][1] = sx;      // Sum of x
+    m[0][2] = sy;      // Sum of y
+    m[1][0] = sx;      // Sum of x
+    m[1][1] = sx2;     // Sum of x^2
+    m[1][2] = sxy;     // Sum of x*y
+
+    // Display equations before Gauss-Jordan
+    printf("\nApplying Gauss-Jordan Elimination:\n");
+    printf("Equation 1: %.2fa + %.2fb = %.2f\n", m[0][0], m[0][1], m[0][2]);
+    printf("Equation 2: %.2fa + %.2fb = %.2f\n\n", m[1][0], m[1][1], m[1][2]);
+
+    // Solve using Gauss-Jordan elimination
+    gaussJordan(m, 2);
+
+    // Extract results
+    float b = m[1][2]; // Slope
+    float a = m[0][2]; // Intercept
+
+    // Display results
+    printf("\nValues:\n");
+    printf("a (Intercept) = %.2f\n", a);
+    printf("b (Slope) = %.2f\n", b);
+    printf("Equation: y = %.2fx + %.2f\n", b, a);
+
+    return 0;
+}
