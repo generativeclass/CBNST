@@ -30,21 +30,26 @@ int main()
 
     // Compute x and y values
     x[0] = a;
-    printf("X: | %f ", x[0]);
+    
     for (int i = 1; i <= n; i++) 
     { 
         x[i] = x[i - 1] + h;
-        printf("| %f ", x[i]);
+        
     }
-    printf("|\n");
+    printf("\n");
 
-    printf("Y: ");
+    
     for (int i = 0; i <= n; i++) 
     { 
         y[i] = fun(x[i]);
-        printf("| %f ", y[i]);
+        
     }
-    printf("|\n");
+    printf("X\t\t\t\tY\n");
+    for (int i = 0; i <= n; i++) 
+    { 
+        printf("x%d= %.6f\ty%d= %.6f\n", i, x[i], i, y[i]);
+    }
+
 
     // Apply Simpson's 1/3 Rule
     float p1 = y[0] + y[n]; // First and last terms
